@@ -12,19 +12,9 @@ tools {
                 url: 'https://github.com/vikas99341/tomcat-demo-17-04.git'
             }
         }
-        stage('maven-clean') {
+        stage('maven-Steps') {
             steps {
-				sh 'mvn clean'
-            }
-        }
-        stage('maven-compile') {
-            steps {
-				sh 'mvn compile'
-            }
-        }
-        stage('maven-package') {
-            steps {
-				sh 'mvn package'
+				sh 'mvn clean compile test package'
             }
         }
     }
