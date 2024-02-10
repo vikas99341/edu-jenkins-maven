@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+tools {
+  maven 'mvn_home'
+} 
+
+	stages {       
+        stage('SCM-checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-credentials', 
+                url: 'https://github.com/vikas99341/tomcat-demo-17-04.git'
+            }
+        }
+        stage('maven-clean') {
+            steps {
+				sh 'mvn clean'
+            }
+        }
+        stage('maven-compile') {
+            steps {
+				sh 'mvn compile'
+            }
+        }
+        stage('maven-package') {
+            steps {
+				sh 'mvn package'
+            }
+        }
+    }
+}
