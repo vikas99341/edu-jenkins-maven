@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    
+    tools {
+      maven 'mvn_home'
+    }
+    
+    stages {
+        stage('SCM-Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-credentials', 
+                url: 'https://github.com/vikas99341/edu-jenkins-maven.git'
+            }
+        }
+        stage('Maven-Steps') {
+            steps {
+                sh "mvn clean compile test package"
+            }
+        }
+    }
+}
