@@ -1,0 +1,10 @@
+node {  
+    def mvnHome = tool name: 'mvn_home', type: 'maven'
+	stage('SCM-Checkout') { 
+         git branch: 'main', credentialsId: 'git-credentials', 
+		 url: 'https://github.com/vikas99341/jessica-my-app.git'
+    }
+    stage('Maven-Steps') { 
+        sh "${mvnHome}/bin/mvn clean compile test package" 
+    }
+}
