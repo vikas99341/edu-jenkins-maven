@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    
+    tools {
+      maven 'mvn_home'
+    }
+    
+    stages {
+        stage('SCM-Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-credentials', 
+                url: 'https://github.com/vikas99341/edu-jenkins-maven.git'
+            }
+        }
+        stage('Sonar-Analysis') {
+            steps {
+              withSonarQubeEnv('sonarqube-server') {
+                sh 'mvn sonar:sonar'
+              }
+            }
+        }
+		stage("Quality Gate check"){
+          timeout(time: 1, unit: 'HOURS') {
+              def qg = waitForQualityGate()
+              if (qg.status != 'OK') {
+                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+          }
+      }
+        stage('Maven-Steps') {
+            steps {
+                sh "mvn clean compile test package"
+            }
+        }
+    }
+}
